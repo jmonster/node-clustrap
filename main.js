@@ -1,4 +1,5 @@
 var os      = require('os')
+  , fs      = require('fs')
   , cluster = require('cluster')
 
 
