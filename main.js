@@ -3,8 +3,8 @@ var os      = require('os')
 
 
 module.exports = function(app, options) {
-  var logger  = options.logger || console
-    , workers = options.workers || os.cpus().length
+  var logger  = options.logger || app.get('logger') || console
+    , workers = options.workers || app.get('workers') || os.cpus().length
     , port    = options.port || app.get('port') || 3000
     , sock    = options.sock || app.get('sock')
 
