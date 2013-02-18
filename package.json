@@ -1,0 +1,23 @@
+{
+  "name": "clustrap",
+  "version": "0.0.1",
+  "description": "node.js's cluster module bootstrapped with common use case",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jmonster/node-clustrap.git"
+  },
+  "keywords": [
+    "node",
+    "node.js",
+    "cluster",
+    "bootstrap"
+  ],
+  "author": "Johnny Domino <jvdomino@gmail.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "4dd6233f7a5d3ca98ff347e34357afdd77e78968"
+}
