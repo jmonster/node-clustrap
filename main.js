@@ -15,6 +15,15 @@ module.exports = function(app, options) {
 
     logger.info("forking " + String(workers).yellow + " worker processes")
 
+    if(sock){
+      fs.unlink(sock, function(err) {
+        if (err) {
+          logger.error("unable to unlink %s",sock)
+          logger.error(err)
+        }
+      })
+    }
+
     // Fork workers.
     for (var i = 0; i < workers; i++) {
       cluster.fork()
@@ -45,22 +54,14 @@ module.exports = function(app, options) {
 
   function startWithSock (sock) {
     var oldUmask = process.umask(0000)
-    fs.unlink(sock, beginListeningOnSocket)
 
-    function beginListeningOnSocket(err) {
-      if (err) {
-        logger.error("unable to unlink %s",sock)
-        logger.error(err)
-      }
-
-      app.listen(sock, function() {
-        process.umask(oldUmask)
-        var s = (app.get('name') || "app").green
-          + " listening at " + String(sock).yellow
-          + " in " + app.settings.env.yellow + " mode"
-        if (workers) s = s + " with " + String(workers).yellow + " workers"
-        logger.info(s)
-      })
-    }
+    app.listen(sock, function() {
+      process.umask(oldUmask)
+      var s = (app.get('name') || "app").green
+        + " listening at " + String(sock).yellow
+        + " in " + app.settings.env.yellow + " mode"
+      if (workers) s = s + " with " + String(workers).yellow + " workers"
+      logger.info(s)
+    })
   }
 }
