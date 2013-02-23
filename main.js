@@ -2,47 +2,59 @@ var os      = require('os')
   , fs      = require('fs')
   , cluster = require('cluster')
 
-
 module.exports = function(app, options) {
   var logger  = options.logger || app.get('logger') || console
-    , workers = (options.workers !== undefined ? options.workers : app.get('workers') || os.cpus().length )
-    , port    = options.port || app.get('port') || 3000
+    , port    = options.port || app.get('port')
     , sock    = options.sock || app.get('sock')
 
-  if (cluster.isMaster) {
-    // if not using workers, short circuit and have main listen with no workers
-    if ( workers === false || workers === 0 ) return launch_app()
+  var workers
+  if (typeof options.workers === 'number') {
+    workers = options.workers
+  } else if (options.workers === false || options.workers === 'false') {
+    workers = 0
+  } else {
+    workers = app.get('workers') || os.cpus().length
+  }
 
+  // skip cluster if no workers
+  if (workers === 0) {
+    return listen()
+  }
+
+  // use cluster
+  if (cluster.isMaster) {
     logger.info("forking " + String(workers).yellow + " worker processes")
 
-    if(sock){
+    // remove previous socket before continuing start-up
+    if (sock) {
       fs.unlink(sock, function(err) {
-        if (err) {
-          logger.error("unable to unlink %s",sock)
+        // suppress ENOENT error as it simply means the sock didn't previously exist
+        if (err && err.code !== "ENOENT") {
           logger.error(err)
         }
       })
-    }
-
-    // Fork workers.
-    for (var i = 0; i < workers; i++) {
-      cluster.fork()
     }
 
     cluster.on('exit', function(worker, code, signal) {
       logger.error(('worker ' + worker.process.pid + ' died').red + ', reforking...')
       var worker = cluster.fork()
     })
+
+    // Fork workers.
+    for (var i = 0; i < workers; i++) {
+      cluster.fork()
+    }
+
   } else {
-    launch_app()
+    listen()
   }
 
-  function launch_app () {
-    if (sock) { startWithSock(sock) }
-    else {      startWithPort(app.get('port')) }
+  function listen () {
+    if (sock) { listenOnSocket(sock) }
+    else {      listenOnPort(port) }
   }
 
-  function startWithPort (port) {
+  function listenOnPort (port) {
     app.listen(port, function() {
       var s = (app.get('name') || "app").green
         + " listening on port " + String(port).yellow
@@ -52,7 +64,7 @@ module.exports = function(app, options) {
     })
   }
 
-  function startWithSock (sock) {
+  function listenOnSocket (sock) {
     var oldUmask = process.umask(0000)
 
     app.listen(sock, function() {
