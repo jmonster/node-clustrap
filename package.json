@@ -17,7 +17,5 @@
     "bootstrap"
   ],
   "author": "Johnny Domino <jvdomino@gmail.com>",
-  "license": "MIT",
-  "readmeFilename": "README.md",
-  "gitHead": "4dd6233f7a5d3ca98ff347e34357afdd77e78968"
+  "license": "MIT"
 }
