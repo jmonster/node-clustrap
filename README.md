@@ -23,7 +23,7 @@ clustrap(app)
 ```
 
 ## example 3
-You can disable cluster by specifying `0` or `false`
+You can disable cluster by specifying `0` workers
 ```javascript
 var clustrap = require('clustrap')
 
