@@ -6,8 +6,8 @@ module.exports = function(app, options) {
   var logger  = options.logger || app.get('logger') || console
     , port    = options.port || app.get('port')
     , sock    = options.sock || app.get('sock')
+    , workers
 
-  var workers
   if (typeof options.workers === 'number') {
     workers = options.workers
   } else if (options.workers === false || options.workers === 'false') {
