@@ -26,6 +26,7 @@ clustrap(app)
 You can disable cluster by specifying `0` or `false`
 ```javascript
 var clustrap = require('clustrap')
+
 clustrap(app, {
   workers:false || 0,
 })
