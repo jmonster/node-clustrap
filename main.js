@@ -1,6 +1,7 @@
 var os      = require('os')
   , fs      = require('fs')
   , cluster = require('cluster')
+  , colors  = require('colors')
 
 module.exports = function(app, options) {
   var logger  = (options && options.logger) || app.get('logger') || console
