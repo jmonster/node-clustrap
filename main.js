@@ -3,14 +3,14 @@ var os      = require('os')
   , cluster = require('cluster')
 
 module.exports = function(app, options) {
-  var logger  = options.logger || app.get('logger') || console
-    , port    = options.port || app.get('port')
-    , sock    = options.sock || app.get('sock')
+  var logger  = (options && options.logger) || app.get('logger') || console
+    , port    = (options && options.port) || app.get('port')
+    , sock    = (options && options.sock) || app.get('sock')
     , workers
 
-  if (typeof options.workers === 'number') {
+  if (options && typeof options.workers === 'number') {
     workers = options.workers
-  } else if (options.workers === false || options.workers === 'false') {
+  } else if (options && (options.workers === false || options.workers === 'false')) {
     workers = 0
   } else {
     workers = app.get('workers') || os.cpus().length
