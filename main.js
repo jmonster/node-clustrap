@@ -33,7 +33,11 @@ module.exports = function(app, options) {
     d.on('error', function(er) {
       logger.error('error', er.stack)
 
-      // note: we're in dangerous territory now!
+      // Note: we're in dangerous territory!
+      // By definition, something unexpected occurred,
+      // which we probably didn't want.
+      // Anything can happen now!  Be very careful!
+
       try {
         // pass to connect error handler
         next(er)
@@ -42,6 +46,7 @@ module.exports = function(app, options) {
         var killtimer = setTimeout(function() {
           process.exit(1)
         }, 30000)
+
         // But don't keep the process open just for that!
         if (killtimer.unref) { killtimer.unref() } // requires node.js 0.10.x
 
@@ -50,17 +55,28 @@ module.exports = function(app, options) {
         // a new worker.
         cluster.worker.disconnect()
 
-        // stop taking new requests.
-        server.close()
-
-        d.dispose()
+        // try to send an error to the request that triggered the problem
+        if (next) { next(err) }
+        else {
+          // try to send an error to the request that triggered the problem
+          res.statusCode = 500
+          res.setHeader('content-type', 'text/plain')
+          res.end('Oops, there was a problem!\n')
+        }
       } catch (er2) {
         // oh well?
+        console.error('Error sending 500!', er2.stack);
       }
     })
 
-    d.enter()
-    next()
+    // Because req and res were created before this domain existed,
+    // we need to explicitly add them.
+    // See the explanation of implicit vs explicit binding below.
+    d.add(req)
+    d.add(res)
+
+    // Now run the handler function in the domain.
+    d.run(next)
   }
 
 }
