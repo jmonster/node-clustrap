@@ -1,6 +1,6 @@
 {
   "name": "clustrap",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "node.js's cluster module bootstrapped with common use case",
   "main": "main.js",
   "scripts": {
@@ -13,8 +13,7 @@
   "keywords": [
     "node",
     "node.js",
-    "cluster",
-    "bootstrap"
+    "cluster"
   ],
   "author": "Johnny Domino <jvdomino@gmail.com>",
   "license": "MIT",

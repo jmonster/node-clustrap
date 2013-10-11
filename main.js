@@ -79,6 +79,8 @@ module.exports = function(app, options) {
     d.run(next)
   }
 
+  this.logger = logger
+
 }
 
 function configureOptions(app,options) {
