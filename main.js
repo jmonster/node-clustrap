@@ -39,9 +39,6 @@ module.exports = function(app, options) {
       // Anything can happen now!  Be very careful!
 
       try {
-        // pass to connect error handler
-        next(er)
-
         // make sure we close down within 30 seconds
         var killtimer = setTimeout(function() {
           process.exit(1)
