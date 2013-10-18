@@ -53,7 +53,7 @@ module.exports = function(app, options) {
         cluster.worker.disconnect()
 
         // try to send an error to the request that triggered the problem
-        if (next) { next(err) }
+        if (next) { next(er) }
         else {
           // try to send an error to the request that triggered the problem
           res.statusCode = 500
