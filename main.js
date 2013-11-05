@@ -50,7 +50,7 @@ module.exports = function(app, options) {
         // let the master know we're through.  This will trigger a
         // 'disconnect' in the cluster master, and then it will fork
         // a new worker.
-        cluster.worker.disconnect()
+        cluster.worker && cluster.worker.disconnect()
 
         // try to send an error to the request that triggered the problem
         if (next) { next(er) }
