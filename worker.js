@@ -7,9 +7,9 @@ function clustrap(app,options) {
 
   function listenOnPort (port) {
     app.listen(port, function() {
-      var s = (app.get('name') || "app").green
+      var s = (app.name || "app").green
         + " listening on port " + String(port).yellow
-        + " in " + app.settings.env.yellow + " mode"
+        + " in " + (process.env.NODE_ENV || "development").yellow + " mode"
 
       if (workers) { s = s + " with " + String(workers).yellow + " workers" }
       logger.info(s)
@@ -21,9 +21,9 @@ function clustrap(app,options) {
 
     app.listen(sock, function() {
       process.umask(oldUmask)
-      var s = (app.get('name') || "app").green
+      var s = (app.name || "app").green
         + " listening at " + String(sock).yellow
-        + " in " + app.settings.env.yellow + " mode"
+        + " in " + (process.env.NODE_ENV || "development").yellow + " mode"
 
       if (workers) { s = s + " with " + String(workers).yellow + " workers" }
       logger.info(s)
