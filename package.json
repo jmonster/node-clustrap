@@ -1,6 +1,6 @@
 {
   "name": "clustrap",
-  "version": "0.0.4",
+  "version": "0.2.4",
   "description": "node.js's cluster module bootstrapped with common use case",
   "main": "main.js",
   "scripts": {
@@ -19,6 +19,6 @@
   "author": "Johnny Domino <jvdomino@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "colors": "~0.6.0-1"
+    "colors": "~0.6.2"
   }
 }
