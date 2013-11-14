@@ -1,4 +1,5 @@
 var os      = require('os')
+  , fs      = require('fs')
   , domain  = require('domain')
   , cluster = require('cluster')
   , master  = require('./master')
@@ -12,14 +13,30 @@ module.exports = function(server, options) {
   var logger  = options.logger
     , workers = options.workers
 
+  function unlinkSocket() {
+    // remove previous socket before continuing start-up
+    var sock = options.sock;
+    console.log('sock: ',sock)
+    if (sock) {
+      try {
+        console.log('deleting')
+        fs.unlinkSync(sock);
+      } catch(e) {
+        // ignore failure to delete non-existant files
+      }
+    }
+  }
+
   this.listen = function listen() {
     // skip cluster if no workers
     if (workers === 0) {
+      unlinkSocket();
       return new worker(server,options).listen()
     }
 
     // use cluster
     if (cluster.isMaster) {
+      unlinkSocket();
       return new master(server,options).listen()
     } else {
       return new worker(server,options).listen()
