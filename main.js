@@ -16,10 +16,8 @@ module.exports = function(server, options) {
   function unlinkSocket() {
     // remove previous socket before continuing start-up
     var sock = options.sock;
-    console.log('sock: ',sock)
     if (sock) {
       try {
-        console.log('deleting')
         fs.unlinkSync(sock);
       } catch(e) {
         // ignore failure to delete non-existant files
