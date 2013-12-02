@@ -1,7 +1,9 @@
 node-clustrap
 =============
 
-node.js's cluster module bootstrapped with common use case
+node.js's cluster module bootstrapped with common use case.
+**please use branch v1 and not master**
+
 
 ## example 1
 ```javascript
