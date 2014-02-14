@@ -2,13 +2,15 @@ var os      = require('os')
   , fs      = require('fs')
   , cluster = require('cluster')
   , colors  = require('colors')
+  ;
 
 module.exports = function(app, options) {
-  var logger  = (options && options.logger) || app.get('logger') || console
-    , port    = (options && options.port) || app.get('port')
-    , sock    = (options && options.sock) || app.get('sock')
+  var logger     = (options && options.logger) || app.get('logger') || console
     , debug_port = 5859
+    , port       = (options && options.port) || app.get('port')
+    , sock       = (options && options.sock) || app.get('sock')
     , workers
+    ;
 
   if (options && typeof options.workers === 'number') {
     workers = options.workers
@@ -42,8 +44,9 @@ module.exports = function(app, options) {
       var worker = cluster.fork()
     })
     
-    debug_mode = false;
-    debug_brk = false;
+    var debug_mode = false
+      , debug_brk  = false
+      ;
     
     // Determine if the master process was launched with --debug or --debug-brk
     process.execArgv.forEach(function(arg) {
@@ -64,7 +67,7 @@ module.exports = function(app, options) {
       // Append requested debug flags to cluster settings so new forks have the flags
       // Give each forked process a new debug port
       if (debug_mode) { cluster.settings.execArgv.push('--debug=' + (debug_port + i)); }
-      if (debug_brk) { cluster.settings.execArgv.push('--debug-brk'); }
+      if (debug_brk)  { cluster.settings.execArgv.push('--debug-brk'); }
       
       cluster.fork();
       
