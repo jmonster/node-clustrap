@@ -7,6 +7,7 @@ module.exports = function(app, options) {
   var logger  = (options && options.logger) || app.get('logger') || console
     , port    = (options && options.port) || app.get('port')
     , sock    = (options && options.sock) || app.get('sock')
+    , debug_port = 5859
     , workers
 
   if (options && typeof options.workers === 'number') {
@@ -62,7 +63,7 @@ module.exports = function(app, options) {
     for (var i = 0; i < workers; i++) {
       // Append requested debug flags to cluster settings so new forks have the flags
       // Give each forked process a new debug port
-      if (debug_mode) { cluster.settings.execArgv.push('--debug=' + (5859 + i)); }
+      if (debug_mode) { cluster.settings.execArgv.push('--debug=' + (debug_port + i)); }
       if (debug_brk) { cluster.settings.execArgv.push('--debug-brk'); }
       
       cluster.fork();
